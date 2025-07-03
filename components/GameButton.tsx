@@ -1,19 +1,18 @@
-import { Pressable, Text, ViewStyle } from "react-native";
+import { Pressable, Text } from "react-native";
+import '../global.css';
 
 interface GameButtonProps {
     title: string;
     emoji: string;
-    bgColorHex: string;
     onPress: () => void;
 }
 
-const GameButton = ({ title, emoji, bgColorHex, onPress }: GameButtonProps) => {
-    const containerStyle = `mx-20 my-2 p-10 flex-row border-2 rounded-full active:opacity-25`
-    const bgStyle: ViewStyle = { backgroundColor: bgColorHex };
-
+const GameButton = ({ title, emoji, onPress }: GameButtonProps) => {
+    const containerStyle = `bg-background shadow-2xl shadow-yellow-500 border border-yellow-400 mx-20 my-2 p-10 flex-row rounded-full active:opacity-50`
+    
     return(
-        <Pressable className={containerStyle} onPress={onPress} style={bgStyle}>
-            <Text className="flex-1 text-2xl text-black">{title}</Text>
+        <Pressable className={containerStyle} onPress={onPress}>
+            <Text className="flex-1 font-bold text-2xl text-white">{title}</Text>
             <Text className="text-4xl">{emoji}</Text>
         </Pressable>
     );
