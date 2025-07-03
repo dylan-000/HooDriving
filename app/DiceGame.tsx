@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList, Pressable, ScrollView, Text, View } from 'react-native';
+import { FlatList, Modal, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import '../global.css';
 
 /**
@@ -57,31 +57,32 @@ const DrinkerCard = ({ drinker }: DrinkerProps) => {
     );
 }
 
-const DiceGame = () => {
+const AddDrinkerButton = ({ handlePress }: { handlePress: () => void }) => {
+    return (
+        <Pressable onPress={handlePress}>
+            <View
+                className='m-2 bg-white/30 backdrop-blur-md rounded-full border-2 border-dashed border-yellow-500 p-3'
+            >
+                <Text>Add a friend!</Text>
+            </View>
+        </Pressable>
+    );
+}
 
-    // Temp values for now
-    let drinkers: Drinker[] = [
+const DiceGame = () => {
+    const [modalVisible, setModalVisible] = useState(false); // state for the 'add friend' modal form
+    const [drinkerEntryText, setDrinkerEntryText] = useState('');
+
+    // This collection has to be a stateful, otherwise it won't cause any re-rendering on change
+    const [drinkers, SetDrinkers] = useState<Drinker[]>([
         { name: 'Dylan' },
         { name: 'Nathaniel' },
-        { name: 'Sophia' },
-        { name: 'Jackson' },
-        { name: 'Isabella' },
-        { name: 'Liam' },
-        { name: 'Olivia' },
-        { name: 'Noah' },
-        { name: 'Emma' },
-        { name: 'Aiden' },
-        { name: 'Mia' },
-        { name: 'Lucas' },
-        { name: 'Amelia' },
-        { name: 'Ethan' },
-        { name: 'Harper' },
-        { name: 'Mason' },
-        { name: 'Ella' },
-        { name: 'Logan' },
-        { name: 'Avery' },
-        { name: 'James' }
-    ];
+    ]);
+
+    const addDrinker = (drinker: Drinker) => {
+        SetDrinkers(prev => [...prev, drinker]);
+    }
+
 
     return (
         <ScrollView className="flex-1 bg-[#282c34]"
@@ -96,6 +97,38 @@ const DiceGame = () => {
                     Welcome to Roll The Dice! The game is as simple as you think, just upload images of your friends and let that n-sided dice rip!
                 </Text>
                 <Dice drinkers={drinkers} />
+
+                <Modal
+                    animationType='slide'
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        setModalVisible(!modalVisible);
+                    }}
+                >
+                    <View className="flex-1 justify-center items-center bg-black bg-opacity-50">
+                        <View className="w-11/12 p-6 rounded-2xl bg-customRed items-center">
+                            <TextInput
+                                className="w-full px-4 py-2 mb-4 bg-white text-black rounded-xl"
+                                placeholder="Enter name"
+                                placeholderTextColor="#888"
+                                onChangeText={setDrinkerEntryText}
+                                value={drinkerEntryText}
+                            />
+                            <Pressable
+                                className="bg-white px-6 py-2 rounded-xl"
+                                onPress={() => {
+                                    setModalVisible(!modalVisible);
+                                    addDrinker({ name: drinkerEntryText });
+                                }}
+                            >
+                                <Text className="text-customRed font-semibold">Add Drinker</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                </Modal>
+
+                <AddDrinkerButton handlePress={() => { setModalVisible(!modalVisible) }} />
                 <FlatList
                     className='flex-1 mt-20 w-1/2'
                     data={drinkers}
