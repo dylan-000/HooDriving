@@ -1,5 +1,7 @@
+import { X } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { FlatList, Modal, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+
 import '../global.css';
 
 /**
@@ -47,23 +49,27 @@ function Dice({ drinkers }: DiceProps) {
     );
 }
 
-const DrinkerCard = ({ drinker }: DrinkerProps) => {
+const DrinkerCard = ({ drinker, handlePress }: DrinkerProps & {handlePress: ()=> void}) => {
     return (
         <View
-            className='m-2 bg-yellow-200 rounded-full border border-yellow-500 p-3'
+            className='flex-row m-2 bg-yellow-200 rounded-full border border-yellow-500 p-3'
         >
-            <Text>{drinker.name}</Text>
+            <Text className='text-center flex-1 text-xl font-bold'>{drinker.name}</Text>
+
+            <Pressable onPress={handlePress}>
+                <X color='black'/>
+            </Pressable>
         </View>
     );
 }
 
-const AddDrinkerButton = ({ handlePress }: { handlePress: () => void }) => {
+const AddDrinkerButton = ({ handlePress, text }: { handlePress: () => void, text: string }) => {
     return (
         <Pressable onPress={handlePress}>
             <View
                 className='m-2 bg-white/30 backdrop-blur-md rounded-full border-2 border-dashed border-yellow-500 p-3'
             >
-                <Text>Add a friend!</Text>
+                <Text className='font-bold text-xl text-white'>{text}</Text>
             </View>
         </Pressable>
     );
@@ -81,6 +87,10 @@ const DiceGame = () => {
 
     const addDrinker = (drinker: Drinker) => {
         SetDrinkers(prev => [...prev, drinker]);
+    }
+
+    const removeDrinker = (drinker: Drinker) => {
+        SetDrinkers(prev => prev.filter(d => d != drinker));
     }
 
 
@@ -106,7 +116,7 @@ const DiceGame = () => {
                         setModalVisible(!modalVisible);
                     }}
                 >
-                    <View className="flex-1 justify-center items-center bg-black bg-opacity-50">
+                    <View className="flex-1 justify-center items-center bg-[#282c34] bg-opacity-50">
                         <View className="w-11/12 p-6 rounded-2xl bg-customRed items-center">
                             <TextInput
                                 className="w-full px-4 py-2 mb-4 bg-white text-black rounded-xl"
@@ -120,6 +130,7 @@ const DiceGame = () => {
                                 onPress={() => {
                                     setModalVisible(!modalVisible);
                                     addDrinker({ name: drinkerEntryText });
+                                    setDrinkerEntryText('');
                                 }}
                             >
                                 <Text className="text-customRed font-semibold">Add Drinker</Text>
@@ -128,11 +139,14 @@ const DiceGame = () => {
                     </View>
                 </Modal>
 
-                <AddDrinkerButton handlePress={() => { setModalVisible(!modalVisible) }} />
+                <View className='mt-10'>
+                    <AddDrinkerButton handlePress={() => { setModalVisible(!modalVisible) }} text='Add a friend!' />
+                </View>
+
                 <FlatList
-                    className='flex-1 mt-20 w-1/2'
+                    className='flex-1 mt-10 w-1/2'
                     data={drinkers}
-                    renderItem={({ item }) => <DrinkerCard drinker={item} />}
+                    renderItem={({ item }) => <DrinkerCard drinker={item} handlePress={ () => { removeDrinker; console.log(`${item} removed`) } }/>}
                     scrollEnabled={false}
                 />
             </View>
@@ -141,3 +155,5 @@ const DiceGame = () => {
 }
 
 export default DiceGame;
+
+// remove drinker button in the drinker card is not working properly
