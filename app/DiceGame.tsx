@@ -1,15 +1,10 @@
+import { Drinker } from '@/models/drinker';
 import { X } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { FlatList, Modal, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 
 import '../global.css';
 
-/**
- * Need to implement dynamic adding and removing of the drinkers players in the dice game: 
- * - Add a button that will pull up a form that will ask for their information
-*/
-
-// Helper function to introduce a delay in the rolling of the dice
 function delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -33,7 +28,7 @@ function Dice({ drinkers }: DiceProps) {
     const handlePress = async () => {
         for (let i = 0; i < 20; i++) {
             let rollChoice: Drinker = drinkers[Math.floor(Math.random() * drinkers.length)];
-            setText(rollChoice.name);
+            setText(rollChoice.getName());
             await delay((i ** 2) + 50); // Exponentially slow down the dice to introduce suspension
         }
     }
@@ -56,7 +51,7 @@ const DrinkerCard = ({ drinker, handlePress }: DrinkerProps & {handlePress: ()=>
         >
             <Text className='text-center flex-1 text-xl font-bold'>{drinker.name}</Text>
 
-            <Pressable onPress={handlePress}>
+            <Pressable onPress={handlePress} className='active: opacity-50'>
                 <X color='black'/>
             </Pressable>
         </View>
@@ -78,21 +73,15 @@ const AddDrinkerButton = ({ handlePress, text }: { handlePress: () => void, text
 const DiceGame = () => {
     const [modalVisible, setModalVisible] = useState(false); // state for the 'add friend' modal form
     const [drinkerEntryText, setDrinkerEntryText] = useState('');
-
-    // This collection has to be a stateful, otherwise it won't cause any re-rendering on change
-    const [drinkers, SetDrinkers] = useState<Drinker[]>([
-        { name: 'Dylan' },
-        { name: 'Nathaniel' },
-    ]);
+    const [drinkers, SetDrinkers] = useState<Drinker[]>([]);
 
     const addDrinker = (drinker: Drinker) => {
         SetDrinkers(prev => [...prev, drinker]);
     }
 
     const removeDrinker = (drinker: Drinker) => {
-        SetDrinkers(prev => prev.filter(d => d != drinker));
+        SetDrinkers(prev => prev.filter(d => d.getId() != drinker.getId()));
     }
-
 
     return (
         <ScrollView className="flex-1 bg-[#282c34]"
@@ -129,7 +118,7 @@ const DiceGame = () => {
                                 className="bg-white px-6 py-2 rounded-xl"
                                 onPress={() => {
                                     setModalVisible(!modalVisible);
-                                    addDrinker({ name: drinkerEntryText });
+                                    addDrinker( new Drinker(drinkerEntryText) );
                                     setDrinkerEntryText('');
                                 }}
                             >
@@ -142,11 +131,12 @@ const DiceGame = () => {
                 <View className='mt-10'>
                     <AddDrinkerButton handlePress={() => { setModalVisible(!modalVisible) }} text='Add a friend!' />
                 </View>
-
+                                
                 <FlatList
                     className='flex-1 mt-10 w-1/2'
                     data={drinkers}
-                    renderItem={({ item }) => <DrinkerCard drinker={item} handlePress={ () => { removeDrinker; console.log(`${item} removed`) } }/>}
+                    renderItem={({ item }) => <DrinkerCard drinker={item} handlePress={ () => { removeDrinker(item) } }/>}
+                    keyExtractor={(drinker) => drinker.getId()}
                     scrollEnabled={false}
                 />
             </View>
@@ -155,5 +145,3 @@ const DiceGame = () => {
 }
 
 export default DiceGame;
-
-// remove drinker button in the drinker card is not working properly

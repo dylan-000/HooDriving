@@ -1,8 +1,3 @@
-type Drinker = {
-    name: string;
-    img?: string;
-}
-
 interface DiceProps {
     drinkers: Drinker[];
 }

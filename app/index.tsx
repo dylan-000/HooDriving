@@ -49,12 +49,12 @@ export default function Index() {
           <GameButton
             title="Revolver Roulette"
             emoji="🔫"
-            onPress={() => { router.navigate('/RouletteGame') }}
+            onPress={() => { router.navigate('./RouletteGame') }}
           />
           <GameButton
             title="Roll the Dice"
             emoji="🎲"
-            onPress={() => { router.navigate('/DiceGame') }}
+            onPress={() => { router.navigate('./DiceGame') }}
           />
         </View>
       </ScrollView>
