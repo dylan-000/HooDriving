@@ -24,7 +24,7 @@ export const AddDrinkerModal = ({ addDrinkerFunc, visible, setVisible } : { addD
             value={drinkerEntryText}
           />
           <Pressable
-            className="bg-white px-6 py-2 rounded-xl"
+            className="bg-white px-6 py-2 rounded-xl active:opacity-50"
             onPress={() => {
               setVisible(!visible);
               addDrinkerFunc(new Drinker(drinkerEntryText));

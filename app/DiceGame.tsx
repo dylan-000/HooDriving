@@ -45,7 +45,7 @@ function Dice({ drinkers }: DiceProps) {
     );
 }
 
-const DrinkerCard = ({ drinker, handlePress }: DrinkerProps & {handlePress: ()=> void}) => {
+const DrinkerCard = ({ drinker, handlePress }: DrinkerProps & { handlePress: () => void }) => {
     return (
         <View
             className='flex-row m-2 bg-yellow-200 rounded-full border border-yellow-500 p-3'
@@ -53,7 +53,7 @@ const DrinkerCard = ({ drinker, handlePress }: DrinkerProps & {handlePress: ()=>
             <Text className='text-center flex-1 text-xl font-bold'>{drinker.name}</Text>
 
             <Pressable onPress={handlePress} className='active: opacity-50'>
-                <X color='black'/>
+                <X color='black' />
             </Pressable>
         </View>
     );
@@ -61,12 +61,8 @@ const DrinkerCard = ({ drinker, handlePress }: DrinkerProps & {handlePress: ()=>
 
 const AddDrinkerButton = ({ handlePress, text }: { handlePress: () => void, text: string }) => {
     return (
-        <Pressable onPress={handlePress}>
-            <View
-                className='m-2 bg-white/30 backdrop-blur-md rounded-full border-2 border-dashed border-yellow-500 p-3'
-            >
-                <Text className='font-bold text-xl text-white'>{text}</Text>
-            </View>
+        <Pressable onPress={handlePress} className='m-2 bg-white/30 backdrop-blur-md rounded-full border-2 border-dashed border-yellow-500 p-3 active:opacity-50'>
+            <Text className='font-bold text-xl text-white'>{text}</Text>
         </Pressable>
     );
 }
@@ -98,16 +94,16 @@ const DiceGame = () => {
                 </Text>
                 <Dice drinkers={drinkers} />
 
-                <AddDrinkerModal addDrinkerFunc={addDrinker} visible={modalVisible} setVisible={setModalVisible}/>
+                <AddDrinkerModal addDrinkerFunc={addDrinker} visible={modalVisible} setVisible={setModalVisible} />
 
                 <View className='mt-10'>
                     <AddDrinkerButton handlePress={() => { setModalVisible(!modalVisible) }} text='Add a friend!' />
                 </View>
-                                
+
                 <FlatList
                     className='flex-1 mt-10 w-1/2'
                     data={drinkers}
-                    renderItem={({ item }) => <DrinkerCard drinker={item} handlePress={ () => { removeDrinker(item) } }/>}
+                    renderItem={({ item }) => <DrinkerCard drinker={item} handlePress={() => { removeDrinker(item) }} />}
                     keyExtractor={(drinker) => drinker.getId()}
                     scrollEnabled={false}
                 />
