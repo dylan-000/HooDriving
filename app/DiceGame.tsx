@@ -1,7 +1,8 @@
 import { Drinker } from '@/models/drinker';
+import { AddDrinkerModal } from 'components/AddDrinkerModal';
 import { X } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { FlatList, Modal, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { FlatList, Pressable, ScrollView, Text, View } from 'react-native';
 
 import '../global.css';
 
@@ -71,7 +72,7 @@ const AddDrinkerButton = ({ handlePress, text }: { handlePress: () => void, text
 }
 
 const DiceGame = () => {
-    const [modalVisible, setModalVisible] = useState(false); // state for the 'add friend' modal form
+    const [modalVisible, setModalVisible] = useState(false);
     const [drinkerEntryText, setDrinkerEntryText] = useState('');
     const [drinkers, SetDrinkers] = useState<Drinker[]>([]);
 
@@ -97,36 +98,7 @@ const DiceGame = () => {
                 </Text>
                 <Dice drinkers={drinkers} />
 
-                <Modal
-                    animationType='slide'
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                        setModalVisible(!modalVisible);
-                    }}
-                >
-                    <View className="flex-1 justify-center items-center bg-[#282c34] bg-opacity-50">
-                        <View className="w-11/12 p-6 rounded-2xl bg-customRed items-center">
-                            <TextInput
-                                className="w-full px-4 py-2 mb-4 bg-white text-black rounded-xl"
-                                placeholder="Enter name"
-                                placeholderTextColor="#888"
-                                onChangeText={setDrinkerEntryText}
-                                value={drinkerEntryText}
-                            />
-                            <Pressable
-                                className="bg-white px-6 py-2 rounded-xl"
-                                onPress={() => {
-                                    setModalVisible(!modalVisible);
-                                    addDrinker( new Drinker(drinkerEntryText) );
-                                    setDrinkerEntryText('');
-                                }}
-                            >
-                                <Text className="text-customRed font-semibold">Add Drinker</Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                </Modal>
+                <AddDrinkerModal addDrinkerFunc={addDrinker} visible={modalVisible} setVisible={setModalVisible}/>
 
                 <View className='mt-10'>
                     <AddDrinkerButton handlePress={() => { setModalVisible(!modalVisible) }} text='Add a friend!' />
