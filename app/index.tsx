@@ -56,6 +56,11 @@ export default function Index() {
             emoji="🎲"
             onPress={() => { router.navigate('./DiceGame') }}
           />
+          <GameButton
+            title="Trivia Time"
+            emoji="❔❔"
+            onPress={() => { router.navigate('./TriviaGame') }}
+          />
         </View>
       </ScrollView>
     </ImageBackground>

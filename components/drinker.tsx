@@ -1,20 +1,16 @@
 import { images } from '@/constants/images';
+import { Drinker } from '@/models/drinker';
 import { Image, Text, View } from 'react-native';
 
-const DrinkerCard = ({ name, img }: Drinker) => {
+const DrinkerCard = ({ drinker }: {drinker: Drinker}) => {
     return (
         <View className='border-2 rounded-xl p-4 m-2'>
             <Image
                 source={images.placeholder}
             />
-            <Text className='p-1 text-center text-3xl font-bold'>{name}</Text>
+            <Text className='p-1 text-center text-3xl font-bold'>{drinker.getName()}</Text>
         </View>
     );
 }
 
-/**
- * Could make a view that would encapsulate the card component that would just be an image of a slot machine
- * 
- * then the image would just change when the slot is pulled and
- */
 export default DrinkerCard;
