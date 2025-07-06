@@ -2,7 +2,7 @@ import { Drinker } from "@/models/drinker";
 import { useState } from "react";
 import { Modal, Pressable, Text, TextInput, View } from "react-native";
 
-export const AddDrinkerModal = ({ addDrinkerFunc, visible, setVisible } : { addDrinkerFunc: (drinker: Drinker) => void, visible: boolean, setVisible: (vis: boolean) => void }) => {
+export const AddDrinkerModal = ({ addDrinkerFunc, visible, setVisible }: { addDrinkerFunc: (drinker: Drinker) => void, visible: boolean, setVisible: (vis: boolean) => void }) => {
   const [drinkerEntryText, setDrinkerEntryText] = useState('');
 
   return (
@@ -26,9 +26,13 @@ export const AddDrinkerModal = ({ addDrinkerFunc, visible, setVisible } : { addD
           <Pressable
             className="bg-white px-6 py-2 rounded-xl active:opacity-50"
             onPress={() => {
-              setVisible(!visible);
-              addDrinkerFunc(new Drinker(drinkerEntryText));
-              setDrinkerEntryText('');
+              if (drinkerEntryText == '') {
+                setVisible(!visible);
+              } else {
+                setVisible(!visible);
+                addDrinkerFunc(new Drinker(drinkerEntryText));
+                setDrinkerEntryText('');
+              }
             }}
           >
             <Text className="text-customRed font-semibold">Add Drinker</Text>

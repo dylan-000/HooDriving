@@ -27,10 +27,14 @@ function Dice({ drinkers }: DiceProps) {
 
     // Loop arbitrary amt of iterations randomizing the dice before landing on one
     const handlePress = async () => {
-        for (let i = 0; i < 20; i++) {
-            let rollChoice: Drinker = drinkers[Math.floor(Math.random() * drinkers.length)];
-            setText(rollChoice.getName());
-            await delay((i ** 2) + 50); // Exponentially slow down the dice to introduce suspension
+        if (drinkers.length === 0) {
+            return;
+        } else {
+            for (let i = 0; i < 20; i++) {
+                let rollChoice: Drinker = drinkers[Math.floor(Math.random() * drinkers.length)];
+                setText(rollChoice.getName());
+                await delay((i ** 2) + 50); // Exponentially slow down the dice to introduce suspension
+            }
         }
     }
 
